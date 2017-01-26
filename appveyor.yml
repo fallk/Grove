@@ -1,0 +1,85 @@
+# Build file originally from jcabi/jcabi-aspects under the following license:
+# 
+# Copyright (c) 2012-2016, jcabi.com
+# All rights reserved.
+# 
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met: 1) Redistributions of source code must retain the above
+# copyright notice, this list of conditions and the following
+# disclaimer. 2) Redistributions in binary form must reproduce the above
+# copyright notice, this list of conditions and the following
+# disclaimer in the documentation and/or other materials provided
+# with the distribution. 3) Neither the name of the jcabi.com nor
+# the names of its contributors may be used to endorse or promote
+# products derived from this software without specific prior written
+# permission.
+# 
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT
+# NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+# FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+# THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+# INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+# STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+# OF THE POSSIBILITY OF SUCH DAMAGE.
+# 
+
+version: '{build}'
+skip_tags: true
+clone_depth: 10
+environment:
+  matrix:
+    #- JAVA_HOME: C:\Program Files\Java\jdk1.7.0
+    - JAVA_HOME: C:\Program Files\Java\jdk1.8.0
+branches:
+  only:
+    - master
+  except:
+    - gh-pages
+os: Windows Server 2012
+install:
+  - ps: |
+      Add-Type -AssemblyName System.IO.Compression.FileSystem
+      if (!(Test-Path -Path "C:\maven" )) {
+        (new-object System.Net.WebClient).DownloadFile('http://www.us.apache.org/dist/maven/maven-3/3.2.5/binaries/apache-maven-3.2.5-bin.zip', 'C:\maven-bin.zip')
+        [System.IO.Compression.ZipFile]::ExtractToDirectory("C:\maven-bin.zip", "C:\maven")
+      }
+  - cmd: SET PATH=C:\maven\apache-maven-3.2.5\bin;%JAVA_HOME%\bin;%PATH:C:\Ruby193\bin;=%
+  - cmd: SET MAVEN_OPTS=-XX:MaxPermSize=2g -Xmx4g
+  - cmd: SET M2_HOME=C:\maven\apache-maven-3.2.5
+  - cmd: SET JAVA_OPTS=-XX:MaxPermSize=2g -Xmx4g
+  - cmd: mvn --version
+  - cmd: java -version
+build_script:
+  - mvn clean package -B -Dmaven.test.skip=true
+test_script:
+  - mvn clean install --batch-mode -Pqulice
+cache:
+#  - C:\maven\
+  - C:\Users\appveyor\.m2
+
+  
+artifacts:
+
+  # pushing a single file
+  - path: target\*.jar
+
+deploy:
+  tag: 'rev$(appveyor_build_version)'
+  release: 'JFunktion r$(appveyor_build_version)'
+  description: 'Built from branch $(APPVEYOR_REPO_BRANCH) at $(APPVEYOR_REPO_COMMIT_TIMESTAMP).'
+  
+  provider: GitHub
+  auth_token:
+    secure: wShbQfYcfaf2ZgU8dFgLTVJglCyGiK9/BHWcEbVZ4sU8SqxokPc4pFfl1ZY4qtlO # your encrypted token from GitHub
+  artifact: /.*/
+  draft: false
+  prerelease: false
+  on:
+    branch: master                 # release from master branch only
+    #appveyor_repo_tag: true        # deploy on tag push only
