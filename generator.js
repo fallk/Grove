@@ -29,71 +29,76 @@ function findPrimitives(str) {
   return prim;
 }
 
-const files = fs.readdirSync('./generators/');
+function process(dir,targ='src') {
+  const files = fs.readdirSync(dir);
 
-for (const file of files) {
-  const str = fs.readFileSync('./generators/' + file, 'utf8');
+  for (const file of files) {
+    const str = fs.readFileSync(dir + file, 'utf8');
 
-  const numPrimitives = findPrimitives(str);
+    const numPrimitives = findPrimitives(str);
 
-  const len = primitives.length;
+    const len = primitives.length;
 
-  if (numPrimitives == 1) {
+    if (numPrimitives == 1) {
 
-    for (let i = 0; i < len; i++) {
-      let s = str.replace(/\$primitive\$/g, primitives[i])
-                 .replace(/\$primitiveFmt\$/g, capPrimitives[i])
-                 .replace(/\$primitiveN\$/g, nPrimitives[i]);
+      for (let i = 0; i < len; i++) {
+        let s = str.replace(/\$primitive\$/g, primitives[i])
+                   .replace(/\$primitiveFmt\$/g, capPrimitives[i])
+                   .replace(/\$primitiveN\$/g, nPrimitives[i]);
 
-      let f = file.replace(/\$primitive\$/g, primitives[i])
-                  .replace(/\$primitiveFmt\$/g, capPrimitives[i])
-                  .replace(/\$primitiveN\$/g, nPrimitives[i]);
+        let f = file.replace(/\$primitive\$/g, primitives[i])
+                    .replace(/\$primitiveFmt\$/g, capPrimitives[i])
+                    .replace(/\$primitiveN\$/g, nPrimitives[i]);
 
-      fs.writeFileSync('./src/main/java/fallk/grove/' + f, s);
-    }
+        fs.writeFileSync('./'+targ+'/fallk/grove/' + f, s);
+      }
 
-  } else if (numPrimitives == 2) {
+    } else if (numPrimitives == 2) {
 
-    for (let i = 0; i < len; i++)
-    for (let j = 0; j < len; j++) {
-      let s = str.replace(/\$primitive\$/g, primitives[i])
-                 .replace(/\$primitiveFmt\$/g, capPrimitives[i])
-                 .replace(/\$primitiveN\$/g, nPrimitives[i])
-                 .replace(/\$primitive2\$/g, primitives[j])
-                 .replace(/\$primitiveFmt2\$/g, capPrimitives[j])
-                 .replace(/\$primitiveN2\$/g, capPrimitives[j]);
+      for (let i = 0; i < len; i++)
+      for (let j = 0; j < len; j++) {
+        let s = str.replace(/\$primitive\$/g, primitives[i])
+                   .replace(/\$primitiveFmt\$/g, capPrimitives[i])
+                   .replace(/\$primitiveN\$/g, nPrimitives[i])
+                   .replace(/\$primitive2\$/g, primitives[j])
+                   .replace(/\$primitiveFmt2\$/g, capPrimitives[j])
+                   .replace(/\$primitiveN2\$/g, capPrimitives[j]);
 
-      let f = file.replace(/\$primitive\$/g, primitives[i])
-                  .replace(/\$primitiveFmt\$/g, capPrimitives[i])
-                  .replace(/\$primitiveN\$/g, nPrimitives[i])
-                  .replace(/\$primitive2\$/g, primitives[j])
-                  .replace(/\$primitiveFmt2\$/g, capPrimitives[j])
-                  .replace(/\$primitiveN2\$/g, capPrimitives[j]);
+        let f = file.replace(/\$primitive\$/g, primitives[i])
+                    .replace(/\$primitiveFmt\$/g, capPrimitives[i])
+                    .replace(/\$primitiveN\$/g, nPrimitives[i])
+                    .replace(/\$primitive2\$/g, primitives[j])
+                    .replace(/\$primitiveFmt2\$/g, capPrimitives[j])
+                    .replace(/\$primitiveN2\$/g, capPrimitives[j]);
 
-      fs.writeFileSync('./src/main/java/fallk/grove/' + f, s);
-    }
+        fs.writeFileSync('./'+targ+'/fallk/grove/' + f, s);
+      }
 
-  }/* else if (numPrimitives == 3) {
+    }/* else if (numPrimitives == 3) {
 
-    for (let i = 0; i < len; i++)
-    for (let j = 0; j < len; j++)
-    for (let k = 0; k < len; k++) {
-      let s = str.replace(/\$primitive\$/g, primitives[i])
-                 .replace(/\$primitiveFmt\$/g, capPrimitives[i])
-                 .replace(/\$primitive2\$/g, primitives[j])
-                 .replace(/\$primitiveFmt2\$/g, capPrimitives[j])
-                 .replace(/\$primitive3\$/g, primitives[k])
-                 .replace(/\$primitiveFmt3\$/g, capPrimitives[k]);
+      for (let i = 0; i < len; i++)
+      for (let j = 0; j < len; j++)
+      for (let k = 0; k < len; k++) {
+        let s = str.replace(/\$primitive\$/g, primitives[i])
+                   .replace(/\$primitiveFmt\$/g, capPrimitives[i])
+                   .replace(/\$primitive2\$/g, primitives[j])
+                   .replace(/\$primitiveFmt2\$/g, capPrimitives[j])
+                   .replace(/\$primitive3\$/g, primitives[k])
+                   .replace(/\$primitiveFmt3\$/g, capPrimitives[k]);
 
-      let f = file.replace(/\$primitive\$/g, primitives[i])
-                  .replace(/\$primitiveFmt\$/g, capPrimitives[i])
-                  .replace(/\$primitive2\$/g, primitives[j])
-                  .replace(/\$primitiveFmt2\$/g, capPrimitives[j])
-                  .replace(/\$primitive3\$/g, primitives[k])
-                  .replace(/\$primitiveFmt3\$/g, capPrimitives[k]);
+        let f = file.replace(/\$primitive\$/g, primitives[i])
+                    .replace(/\$primitiveFmt\$/g, capPrimitives[i])
+                    .replace(/\$primitive2\$/g, primitives[j])
+                    .replace(/\$primitiveFmt2\$/g, capPrimitives[j])
+                    .replace(/\$primitive3\$/g, primitives[k])
+                    .replace(/\$primitiveFmt3\$/g, capPrimitives[k]);
 
-      fs.writeFileSync('./src/main/java/fallk/grove/' + f, s);
-    }
+        fs.writeFileSync('./src/main/java/fallk/grove/' + f, s);
+      }
 
-  }*/
+    }*/
+  }
 }
+
+process('./generators/', 'src/main/java');
+process('./test-generators/', 'src/test/java');
