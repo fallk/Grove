@@ -1,4 +1,11 @@
-# JFunktion
-a funky functional programming library for java
+# Grove
+GSON serializers for Trove
 
-you can get it through [jitpack.io](https://jitpack.io/#rafa1231518/JFunktion/-SNAPSHOT) or download the jar from [GitHub releases](https://github.com/rafa1231518/JFunktion/releases).
+# License
+see License.md file
+
+# go get it
+you can get it through [jitpack.io](https://jitpack.io/#fallk/Grove/-SNAPSHOT).
+
+# how to use
+use `Grove.apply` on your GsonBuilder to install Grove onto it, or create your Gson instance using GroveBuilder (a wrapper for GsonBuilder)
