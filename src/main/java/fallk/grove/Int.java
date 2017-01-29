@@ -6,4 +6,8 @@ final class Int {
         return Integer.parseInt(string);
     }
 
+    public static String toString(int ch) {
+        return Integer.toString(ch);
+    }
+    
 }

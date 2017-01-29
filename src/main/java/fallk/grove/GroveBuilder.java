@@ -21,7 +21,7 @@ public class GroveBuilder {
     private final GsonBuilder _gs;
 
     public GroveBuilder() {
-        _gs = Grove.apply(new GsonBuilder());
+        this(new GsonBuilder());
     }
 
     public GroveBuilder(GsonBuilder gs) {
