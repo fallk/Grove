@@ -26,7 +26,7 @@ public final class MTroveByteDoubleMapTypeAdapter implements JsonSerializer<TByt
         TByteDoubleMap map = new TByteDoubleHashMap(jmap.size());
 
         for (Entry<String, JsonElement> el : jmap.entrySet()) {
-            map.put(Byte.parseByte(el.getKey()), Convert.getAsDouble(el.getValue()));
+            map.put(Byte.parseByte(el.getKey()), Double.parseDouble(el.getValue().getAsString()));
         }
         return map;
     }
@@ -36,7 +36,7 @@ public final class MTroveByteDoubleMapTypeAdapter implements JsonSerializer<TByt
 
         TByteSetDecorator keys = new TByteSetDecorator(src.keySet());
         for (byte key : keys) {
-            jmap.addProperty(Byte.toString(key), src.get(key));
+            jmap.addProperty(Byte.toString(key), Double.toString(src.get(key)));
         }
         
         return jmap;

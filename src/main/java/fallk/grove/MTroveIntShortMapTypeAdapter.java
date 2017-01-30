@@ -26,7 +26,7 @@ public final class MTroveIntShortMapTypeAdapter implements JsonSerializer<TIntSh
         TIntShortMap map = new TIntShortHashMap(jmap.size());
 
         for (Entry<String, JsonElement> el : jmap.entrySet()) {
-            map.put(Int.parseInt(el.getKey()), Convert.getAsShort(el.getValue()));
+            map.put(Int.parseInt(el.getKey()), Short.parseShort(el.getValue().getAsString()));
         }
         return map;
     }
@@ -36,7 +36,7 @@ public final class MTroveIntShortMapTypeAdapter implements JsonSerializer<TIntSh
 
         TIntSetDecorator keys = new TIntSetDecorator(src.keySet());
         for (int key : keys) {
-            jmap.addProperty(Int.toString(key), src.get(key));
+            jmap.addProperty(Int.toString(key), Short.toString(src.get(key)));
         }
         
         return jmap;

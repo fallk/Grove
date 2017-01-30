@@ -26,7 +26,7 @@ public final class MTroveCharCharMapTypeAdapter implements JsonSerializer<TCharC
         TCharCharMap map = new TCharCharHashMap(jmap.size());
 
         for (Entry<String, JsonElement> el : jmap.entrySet()) {
-            map.put(Char.parseChar(el.getKey()), Convert.getAsChar(el.getValue()));
+            map.put(Char.parseChar(el.getKey()), Char.parseChar(el.getValue().getAsString()));
         }
         return map;
     }
@@ -36,7 +36,7 @@ public final class MTroveCharCharMapTypeAdapter implements JsonSerializer<TCharC
 
         TCharSetDecorator keys = new TCharSetDecorator(src.keySet());
         for (char key : keys) {
-            jmap.addProperty(Char.toString(key), src.get(key));
+            jmap.addProperty(Char.toString(key), Char.toString(src.get(key)));
         }
         
         return jmap;

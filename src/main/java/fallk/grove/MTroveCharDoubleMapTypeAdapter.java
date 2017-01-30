@@ -26,7 +26,7 @@ public final class MTroveCharDoubleMapTypeAdapter implements JsonSerializer<TCha
         TCharDoubleMap map = new TCharDoubleHashMap(jmap.size());
 
         for (Entry<String, JsonElement> el : jmap.entrySet()) {
-            map.put(Char.parseChar(el.getKey()), Convert.getAsDouble(el.getValue()));
+            map.put(Char.parseChar(el.getKey()), Double.parseDouble(el.getValue().getAsString()));
         }
         return map;
     }
@@ -36,7 +36,7 @@ public final class MTroveCharDoubleMapTypeAdapter implements JsonSerializer<TCha
 
         TCharSetDecorator keys = new TCharSetDecorator(src.keySet());
         for (char key : keys) {
-            jmap.addProperty(Char.toString(key), src.get(key));
+            jmap.addProperty(Char.toString(key), Double.toString(src.get(key)));
         }
         
         return jmap;

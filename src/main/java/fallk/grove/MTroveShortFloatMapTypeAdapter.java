@@ -26,7 +26,7 @@ public final class MTroveShortFloatMapTypeAdapter implements JsonSerializer<TSho
         TShortFloatMap map = new TShortFloatHashMap(jmap.size());
 
         for (Entry<String, JsonElement> el : jmap.entrySet()) {
-            map.put(Short.parseShort(el.getKey()), Convert.getAsFloat(el.getValue()));
+            map.put(Short.parseShort(el.getKey()), Float.parseFloat(el.getValue().getAsString()));
         }
         return map;
     }
@@ -36,7 +36,7 @@ public final class MTroveShortFloatMapTypeAdapter implements JsonSerializer<TSho
 
         TShortSetDecorator keys = new TShortSetDecorator(src.keySet());
         for (short key : keys) {
-            jmap.addProperty(Short.toString(key), src.get(key));
+            jmap.addProperty(Short.toString(key), Float.toString(src.get(key)));
         }
         
         return jmap;

@@ -26,7 +26,7 @@ public final class MTroveDoubleIntMapTypeAdapter implements JsonSerializer<TDoub
         TDoubleIntMap map = new TDoubleIntHashMap(jmap.size());
 
         for (Entry<String, JsonElement> el : jmap.entrySet()) {
-            map.put(Double.parseDouble(el.getKey()), Convert.getAsInt(el.getValue()));
+            map.put(Double.parseDouble(el.getKey()), Int.parseInt(el.getValue().getAsString()));
         }
         return map;
     }
@@ -36,7 +36,7 @@ public final class MTroveDoubleIntMapTypeAdapter implements JsonSerializer<TDoub
 
         TDoubleSetDecorator keys = new TDoubleSetDecorator(src.keySet());
         for (double key : keys) {
-            jmap.addProperty(Double.toString(key), src.get(key));
+            jmap.addProperty(Double.toString(key), Int.toString(src.get(key)));
         }
         
         return jmap;

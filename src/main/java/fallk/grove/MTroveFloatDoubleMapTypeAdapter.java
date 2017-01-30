@@ -26,7 +26,7 @@ public final class MTroveFloatDoubleMapTypeAdapter implements JsonSerializer<TFl
         TFloatDoubleMap map = new TFloatDoubleHashMap(jmap.size());
 
         for (Entry<String, JsonElement> el : jmap.entrySet()) {
-            map.put(Float.parseFloat(el.getKey()), Convert.getAsDouble(el.getValue()));
+            map.put(Float.parseFloat(el.getKey()), Double.parseDouble(el.getValue().getAsString()));
         }
         return map;
     }
@@ -36,7 +36,7 @@ public final class MTroveFloatDoubleMapTypeAdapter implements JsonSerializer<TFl
 
         TFloatSetDecorator keys = new TFloatSetDecorator(src.keySet());
         for (float key : keys) {
-            jmap.addProperty(Float.toString(key), src.get(key));
+            jmap.addProperty(Float.toString(key), Double.toString(src.get(key)));
         }
         
         return jmap;

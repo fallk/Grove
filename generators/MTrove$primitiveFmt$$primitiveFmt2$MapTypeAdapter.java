@@ -26,7 +26,7 @@ public final class MTrove$primitiveFmt$$primitiveFmt2$MapTypeAdapter implements 
         T$primitiveFmt$$primitiveFmt2$Map map = new T$primitiveFmt$$primitiveFmt2$HashMap(jmap.size());
 
         for (Entry<String, JsonElement> el : jmap.entrySet()) {
-            map.put($primitiveFmt$.parse$primitiveFmt$(el.getKey()), Convert.getAs$primitiveFmt2$(el.getValue()));
+            map.put($primitiveFmt$.parse$primitiveFmt$(el.getKey()), $primitiveFmt2$.parse$primitiveFmt2$(el.getValue().getAsString()));
         }
         return map;
     }
@@ -36,7 +36,7 @@ public final class MTrove$primitiveFmt$$primitiveFmt2$MapTypeAdapter implements 
 
         T$primitiveFmt$SetDecorator keys = new T$primitiveFmt$SetDecorator(src.keySet());
         for ($primitive$ key : keys) {
-            jmap.addProperty($primitiveFmt$.toString(key), src.get(key));
+            jmap.addProperty($primitiveFmt$.toString(key), $primitiveFmt2$.toString(src.get(key)));
         }
         
         return jmap;

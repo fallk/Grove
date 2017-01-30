@@ -26,7 +26,7 @@ public final class MTroveCharFloatMapTypeAdapter implements JsonSerializer<TChar
         TCharFloatMap map = new TCharFloatHashMap(jmap.size());
 
         for (Entry<String, JsonElement> el : jmap.entrySet()) {
-            map.put(Char.parseChar(el.getKey()), Convert.getAsFloat(el.getValue()));
+            map.put(Char.parseChar(el.getKey()), Float.parseFloat(el.getValue().getAsString()));
         }
         return map;
     }
@@ -36,7 +36,7 @@ public final class MTroveCharFloatMapTypeAdapter implements JsonSerializer<TChar
 
         TCharSetDecorator keys = new TCharSetDecorator(src.keySet());
         for (char key : keys) {
-            jmap.addProperty(Char.toString(key), src.get(key));
+            jmap.addProperty(Char.toString(key), Float.toString(src.get(key)));
         }
         
         return jmap;

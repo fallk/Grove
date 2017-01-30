@@ -26,7 +26,7 @@ public final class MTroveIntDoubleMapTypeAdapter implements JsonSerializer<TIntD
         TIntDoubleMap map = new TIntDoubleHashMap(jmap.size());
 
         for (Entry<String, JsonElement> el : jmap.entrySet()) {
-            map.put(Int.parseInt(el.getKey()), Convert.getAsDouble(el.getValue()));
+            map.put(Int.parseInt(el.getKey()), Double.parseDouble(el.getValue().getAsString()));
         }
         return map;
     }
@@ -36,7 +36,7 @@ public final class MTroveIntDoubleMapTypeAdapter implements JsonSerializer<TIntD
 
         TIntSetDecorator keys = new TIntSetDecorator(src.keySet());
         for (int key : keys) {
-            jmap.addProperty(Int.toString(key), src.get(key));
+            jmap.addProperty(Int.toString(key), Double.toString(src.get(key)));
         }
         
         return jmap;

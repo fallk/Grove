@@ -26,7 +26,7 @@ public final class MTroveIntLongMapTypeAdapter implements JsonSerializer<TIntLon
         TIntLongMap map = new TIntLongHashMap(jmap.size());
 
         for (Entry<String, JsonElement> el : jmap.entrySet()) {
-            map.put(Int.parseInt(el.getKey()), Convert.getAsLong(el.getValue()));
+            map.put(Int.parseInt(el.getKey()), Long.parseLong(el.getValue().getAsString()));
         }
         return map;
     }
@@ -36,7 +36,7 @@ public final class MTroveIntLongMapTypeAdapter implements JsonSerializer<TIntLon
 
         TIntSetDecorator keys = new TIntSetDecorator(src.keySet());
         for (int key : keys) {
-            jmap.addProperty(Int.toString(key), src.get(key));
+            jmap.addProperty(Int.toString(key), Long.toString(src.get(key)));
         }
         
         return jmap;

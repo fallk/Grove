@@ -5,6 +5,7 @@ package fallk.grove;
 import java.util.Random;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,7 +28,7 @@ public class TroveShortObjectMapTest {
             public int hashCode() {
                 final int prime = 31;
                 int result = 1;
-                result = prime * result + b;
+                result = prime * result + (int)b;
                 result = prime * result + (flaggy ? 1231 : 1237);
                 result = prime * result + i;
                 result = prime * result + (int) (l ^ (l >>> 32));
@@ -68,7 +69,7 @@ public class TroveShortObjectMapTest {
         public int hashCode() {
             final int prime = 31;
             int result = 1;
-            result = prime * result + b;
+            result = prime * result + (int)b;
             result = prime * result + ((bf == null) ? 0 : bf.hashCode());
             result = prime * result + (bool ? 1231 : 1237);
             result = prime * result + i;

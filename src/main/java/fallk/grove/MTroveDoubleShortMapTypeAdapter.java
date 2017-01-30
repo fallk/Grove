@@ -26,7 +26,7 @@ public final class MTroveDoubleShortMapTypeAdapter implements JsonSerializer<TDo
         TDoubleShortMap map = new TDoubleShortHashMap(jmap.size());
 
         for (Entry<String, JsonElement> el : jmap.entrySet()) {
-            map.put(Double.parseDouble(el.getKey()), Convert.getAsShort(el.getValue()));
+            map.put(Double.parseDouble(el.getKey()), Short.parseShort(el.getValue().getAsString()));
         }
         return map;
     }
@@ -36,7 +36,7 @@ public final class MTroveDoubleShortMapTypeAdapter implements JsonSerializer<TDo
 
         TDoubleSetDecorator keys = new TDoubleSetDecorator(src.keySet());
         for (double key : keys) {
-            jmap.addProperty(Double.toString(key), src.get(key));
+            jmap.addProperty(Double.toString(key), Short.toString(src.get(key)));
         }
         
         return jmap;

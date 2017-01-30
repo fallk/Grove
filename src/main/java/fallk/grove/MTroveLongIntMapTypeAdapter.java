@@ -26,7 +26,7 @@ public final class MTroveLongIntMapTypeAdapter implements JsonSerializer<TLongIn
         TLongIntMap map = new TLongIntHashMap(jmap.size());
 
         for (Entry<String, JsonElement> el : jmap.entrySet()) {
-            map.put(Long.parseLong(el.getKey()), Convert.getAsInt(el.getValue()));
+            map.put(Long.parseLong(el.getKey()), Int.parseInt(el.getValue().getAsString()));
         }
         return map;
     }
@@ -36,7 +36,7 @@ public final class MTroveLongIntMapTypeAdapter implements JsonSerializer<TLongIn
 
         TLongSetDecorator keys = new TLongSetDecorator(src.keySet());
         for (long key : keys) {
-            jmap.addProperty(Long.toString(key), src.get(key));
+            jmap.addProperty(Long.toString(key), Int.toString(src.get(key)));
         }
         
         return jmap;

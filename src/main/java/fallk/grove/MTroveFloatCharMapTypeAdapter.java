@@ -26,7 +26,7 @@ public final class MTroveFloatCharMapTypeAdapter implements JsonSerializer<TFloa
         TFloatCharMap map = new TFloatCharHashMap(jmap.size());
 
         for (Entry<String, JsonElement> el : jmap.entrySet()) {
-            map.put(Float.parseFloat(el.getKey()), Convert.getAsChar(el.getValue()));
+            map.put(Float.parseFloat(el.getKey()), Char.parseChar(el.getValue().getAsString()));
         }
         return map;
     }
@@ -36,7 +36,7 @@ public final class MTroveFloatCharMapTypeAdapter implements JsonSerializer<TFloa
 
         TFloatSetDecorator keys = new TFloatSetDecorator(src.keySet());
         for (float key : keys) {
-            jmap.addProperty(Float.toString(key), src.get(key));
+            jmap.addProperty(Float.toString(key), Char.toString(src.get(key)));
         }
         
         return jmap;

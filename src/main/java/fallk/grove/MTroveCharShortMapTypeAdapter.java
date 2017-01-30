@@ -26,7 +26,7 @@ public final class MTroveCharShortMapTypeAdapter implements JsonSerializer<TChar
         TCharShortMap map = new TCharShortHashMap(jmap.size());
 
         for (Entry<String, JsonElement> el : jmap.entrySet()) {
-            map.put(Char.parseChar(el.getKey()), Convert.getAsShort(el.getValue()));
+            map.put(Char.parseChar(el.getKey()), Short.parseShort(el.getValue().getAsString()));
         }
         return map;
     }
@@ -36,7 +36,7 @@ public final class MTroveCharShortMapTypeAdapter implements JsonSerializer<TChar
 
         TCharSetDecorator keys = new TCharSetDecorator(src.keySet());
         for (char key : keys) {
-            jmap.addProperty(Char.toString(key), src.get(key));
+            jmap.addProperty(Char.toString(key), Short.toString(src.get(key)));
         }
         
         return jmap;
