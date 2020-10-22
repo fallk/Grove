@@ -1,6 +1,5 @@
 package fallk.grove;
 
-import java.lang.reflect.Type;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.FieldNamingStrategy;
@@ -15,7 +14,12 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.stream.JsonReader;
 
+import java.lang.reflect.Type;
+
 /**
+ * Utility to create a {@link Gson} instance with Grove attached.
+ *
+ * @author Maxine
  */
 public class GroveBuilder {
     private final GsonBuilder _gs;
