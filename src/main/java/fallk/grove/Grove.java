@@ -1,8 +1,7 @@
 package fallk.grove;
 
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
+import com.google.gson.JsonParseException;
 import gnu.trove.list.TByteList;
 import gnu.trove.list.TCharList;
 import gnu.trove.list.TDoubleList;
@@ -74,109 +73,116 @@ import gnu.trove.map.TShortLongMap;
 import gnu.trove.map.TShortObjectMap;
 import gnu.trove.map.TShortShortMap;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+
 /**
  * The main Grove class.
  * 
- * @author Rafael
+ * @author Maxine
  */
 public final class Grove {
+    private Grove() {}
+
     /**
      * Add Grove to your {@link GsonBuilder} object
      * 
      * @param gs the {@link GsonBuilder} object
      * @return the same {@link GsonBuilder}, for chaining
      */
-    @SuppressWarnings("rawtypes")
     public static GsonBuilder apply(GsonBuilder gs) {
-        return //
-        gs.registerTypeAdapter(TByteArrayList.class, Adapters.byteAdapter) //
-                .registerTypeAdapter(TCharArrayList.class, Adapters.charAdapter) //
-                .registerTypeAdapter(TDoubleArrayList.class, Adapters.doubleAdapter) //
-                .registerTypeAdapter(TFloatArrayList.class, Adapters.floatAdapter) //
-                .registerTypeAdapter(TIntArrayList.class, Adapters.intAdapter) //
-                .registerTypeAdapter(TLongArrayList.class, Adapters.longAdapter) //
-                .registerTypeAdapter(TShortArrayList.class, Adapters.shortAdapter) //
-                //
-                .registerTypeAdapter(TByteList.class, new TroveByteListGenericTypeAdapter()) //
-                .registerTypeAdapter(TCharList.class, new TroveCharListGenericTypeAdapter()) //
-                .registerTypeAdapter(TDoubleList.class, new TroveDoubleListGenericTypeAdapter()) //
-                .registerTypeAdapter(TFloatList.class, new TroveFloatListGenericTypeAdapter()) //
-                .registerTypeAdapter(TIntList.class, new TroveIntListGenericTypeAdapter()) //
-                .registerTypeAdapter(TLongList.class, new TroveLongListGenericTypeAdapter()) //
-                .registerTypeAdapter(TShortList.class, new TroveShortListGenericTypeAdapter()) //
-                //
-                .registerTypeAdapter(new TypeToken<TByteObjectMap>() {
-                }.getType(), new TroveByteObjectMapTypeAdapter<>()) //
-                .registerTypeAdapter(new TypeToken<TCharObjectMap>() {
-                }.getType(), new TroveCharObjectMapTypeAdapter<>()) //
-                .registerTypeAdapter(new TypeToken<TDoubleObjectMap>() {
-                }.getType(), new TroveDoubleObjectMapTypeAdapter<>()) //
-                .registerTypeAdapter(new TypeToken<TFloatObjectMap>() {
-                }.getType(), new TroveFloatObjectMapTypeAdapter<>()) //
-                .registerTypeAdapter(new TypeToken<TIntObjectMap>() {
-                }.getType(), new TroveIntObjectMapTypeAdapter<>()) //
-                .registerTypeAdapter(new TypeToken<TLongObjectMap>() {
-                }.getType(), new TroveLongObjectMapTypeAdapter<>()) //
-                .registerTypeAdapter(new TypeToken<TShortObjectMap>() {
-                }.getType(), new TroveShortObjectMapTypeAdapter<>()) //
-                //
-                .registerTypeAdapter(TByteByteMap.class, new MTroveByteByteMapTypeAdapter()) //
-                .registerTypeAdapter(TByteCharMap.class, new MTroveByteCharMapTypeAdapter()) //
-                .registerTypeAdapter(TByteDoubleMap.class, new MTroveByteDoubleMapTypeAdapter()) //
-                .registerTypeAdapter(TByteFloatMap.class, new MTroveByteFloatMapTypeAdapter()) //
-                .registerTypeAdapter(TByteIntMap.class, new MTroveByteIntMapTypeAdapter()) //
-                .registerTypeAdapter(TByteLongMap.class, new MTroveByteLongMapTypeAdapter()) //
-                .registerTypeAdapter(TByteShortMap.class, new MTroveByteShortMapTypeAdapter()) //
-                .registerTypeAdapter(TCharByteMap.class, new MTroveCharByteMapTypeAdapter()) //
-                .registerTypeAdapter(TCharCharMap.class, new MTroveCharCharMapTypeAdapter()) //
-                .registerTypeAdapter(TCharDoubleMap.class, new MTroveCharDoubleMapTypeAdapter()) //
-                .registerTypeAdapter(TCharFloatMap.class, new MTroveCharFloatMapTypeAdapter()) //
-                .registerTypeAdapter(TCharIntMap.class, new MTroveCharIntMapTypeAdapter()) //
-                .registerTypeAdapter(TCharLongMap.class, new MTroveCharLongMapTypeAdapter()) //
-                .registerTypeAdapter(TCharShortMap.class, new MTroveCharShortMapTypeAdapter()) //
-                .registerTypeAdapter(TDoubleByteMap.class, new MTroveDoubleByteMapTypeAdapter()) //
-                .registerTypeAdapter(TDoubleCharMap.class, new MTroveDoubleCharMapTypeAdapter()) //
-                .registerTypeAdapter(TDoubleDoubleMap.class, new MTroveDoubleDoubleMapTypeAdapter()) //
-                .registerTypeAdapter(TDoubleFloatMap.class, new MTroveDoubleFloatMapTypeAdapter()) //
-                .registerTypeAdapter(TDoubleIntMap.class, new MTroveDoubleIntMapTypeAdapter()) //
-                .registerTypeAdapter(TDoubleLongMap.class, new MTroveDoubleLongMapTypeAdapter()) //
-                .registerTypeAdapter(TDoubleShortMap.class, new MTroveDoubleShortMapTypeAdapter()) //
-                .registerTypeAdapter(TFloatByteMap.class, new MTroveFloatByteMapTypeAdapter()) //
-                .registerTypeAdapter(TFloatCharMap.class, new MTroveFloatCharMapTypeAdapter()) //
-                .registerTypeAdapter(TFloatDoubleMap.class, new MTroveFloatDoubleMapTypeAdapter()) //
-                .registerTypeAdapter(TFloatFloatMap.class, new MTroveFloatFloatMapTypeAdapter()) //
-                .registerTypeAdapter(TFloatIntMap.class, new MTroveFloatIntMapTypeAdapter()) //
-                .registerTypeAdapter(TFloatLongMap.class, new MTroveFloatLongMapTypeAdapter()) //
-                .registerTypeAdapter(TFloatShortMap.class, new MTroveFloatShortMapTypeAdapter()) //
-                .registerTypeAdapter(TIntByteMap.class, new MTroveIntByteMapTypeAdapter()) //
-                .registerTypeAdapter(TIntCharMap.class, new MTroveIntCharMapTypeAdapter()) //
-                .registerTypeAdapter(TIntDoubleMap.class, new MTroveIntDoubleMapTypeAdapter()) //
-                .registerTypeAdapter(TIntFloatMap.class, new MTroveIntFloatMapTypeAdapter()) //
-                .registerTypeAdapter(TIntIntMap.class, new MTroveIntIntMapTypeAdapter()) //
-                .registerTypeAdapter(TIntLongMap.class, new MTroveIntLongMapTypeAdapter()) //
-                .registerTypeAdapter(TIntShortMap.class, new MTroveIntShortMapTypeAdapter()) //
-                .registerTypeAdapter(TLongByteMap.class, new MTroveLongByteMapTypeAdapter()) //
-                .registerTypeAdapter(TLongCharMap.class, new MTroveLongCharMapTypeAdapter()) //
-                .registerTypeAdapter(TLongDoubleMap.class, new MTroveLongDoubleMapTypeAdapter()) //
-                .registerTypeAdapter(TLongFloatMap.class, new MTroveLongFloatMapTypeAdapter()) //
-                .registerTypeAdapter(TLongIntMap.class, new MTroveLongIntMapTypeAdapter()) //
-                .registerTypeAdapter(TLongLongMap.class, new MTroveLongLongMapTypeAdapter()) //
-                .registerTypeAdapter(TLongShortMap.class, new MTroveLongShortMapTypeAdapter()) //
-                .registerTypeAdapter(TShortByteMap.class, new MTroveShortByteMapTypeAdapter()) //
-                .registerTypeAdapter(TShortCharMap.class, new MTroveShortCharMapTypeAdapter()) //
-                .registerTypeAdapter(TShortDoubleMap.class, new MTroveShortDoubleMapTypeAdapter()) //
-                .registerTypeAdapter(TShortFloatMap.class, new MTroveShortFloatMapTypeAdapter()) //
-                .registerTypeAdapter(TShortIntMap.class, new MTroveShortIntMapTypeAdapter()) //
-                .registerTypeAdapter(TShortLongMap.class, new MTroveShortLongMapTypeAdapter()) //
-                .registerTypeAdapter(TShortShortMap.class, new MTroveShortShortMapTypeAdapter()) //
-        //
-        //        .registerTypeAdapter(TByteObjectMap.class, new TroveByteObjectMapTypeAdapter<>()) //new TypeToken<TByteObjectMap>(){}.getType(), new TroveByteObjectMapTypeAdapter<>()
-        //        .registerTypeAdapter(TCharObjectMap.class, new TroveCharObjectMapTypeAdapter<>()) //
-        //        .registerTypeAdapter(TDoubleObjectMap.class, new TroveDoubleObjectMapTypeAdapter<>()) //
-        //        .registerTypeAdapter(TFloatObjectMap.class, new TroveFloatObjectMapTypeAdapter<>()) //
-        //        .registerTypeAdapter(TIntObjectMap.class, new TroveIntObjectMapTypeAdapter<>()) //
-        //        .registerTypeAdapter(TLongObjectMap.class, new TroveLongObjectMapTypeAdapter<>()) //
-        //        .registerTypeAdapter(TShortObjectMap.class, new TroveShortObjectMapTypeAdapter<>())
+        // Generating: First copy names of all the classes without paths.
+        // Replace Grove(ArrayList|List)(\w+)
+        // With    .registerTypeAdapter\(T$2$1.class, Grove$1$2.INSTANCE\) //
+        // Replace GroveMap(Byte|Char|Double|Float|Int|Long|Object|Short)(Byte|Char|Double|Float|Int|Long|Object|Short)
+        // With    .registerTypeAdapter\(T$1$2Map.class, GroveMap$1$2.INSTANCE\) //
+
+        return gs //
+                .registerTypeAdapter(TByteArrayList.class, GroveArrayListByte.INSTANCE) //
+                .registerTypeAdapter(TCharArrayList.class, GroveArrayListChar.INSTANCE) //
+                .registerTypeAdapter(TDoubleArrayList.class, GroveArrayListDouble.INSTANCE) //
+                .registerTypeAdapter(TFloatArrayList.class, GroveArrayListFloat.INSTANCE) //
+                .registerTypeAdapter(TIntArrayList.class, GroveArrayListInt.INSTANCE) //
+                .registerTypeAdapter(TLongArrayList.class, GroveArrayListLong.INSTANCE) //
+                .registerTypeAdapter(TShortArrayList.class, GroveArrayListShort.INSTANCE) //
+                .registerTypeAdapter(TByteList.class, GroveListByte.INSTANCE) //
+                .registerTypeAdapter(TCharList.class, GroveListChar.INSTANCE) //
+                .registerTypeAdapter(TDoubleList.class, GroveListDouble.INSTANCE) //
+                .registerTypeAdapter(TFloatList.class, GroveListFloat.INSTANCE) //
+                .registerTypeAdapter(TIntList.class, GroveListInt.INSTANCE) //
+                .registerTypeAdapter(TLongList.class, GroveListLong.INSTANCE) //
+                .registerTypeAdapter(TShortList.class, GroveListShort.INSTANCE) //
+                .registerTypeAdapter(TByteByteMap.class, GroveMapByteByte.INSTANCE) //
+                .registerTypeAdapter(TByteCharMap.class, GroveMapByteChar.INSTANCE) //
+                .registerTypeAdapter(TByteDoubleMap.class, GroveMapByteDouble.INSTANCE) //
+                .registerTypeAdapter(TByteFloatMap.class, GroveMapByteFloat.INSTANCE) //
+                .registerTypeAdapter(TByteIntMap.class, GroveMapByteInt.INSTANCE) //
+                .registerTypeAdapter(TByteLongMap.class, GroveMapByteLong.INSTANCE) //
+                .registerTypeAdapter(TByteObjectMap.class, GroveMapByteObject.INSTANCE) //
+                .registerTypeAdapter(TByteShortMap.class, GroveMapByteShort.INSTANCE) //
+                .registerTypeAdapter(TCharByteMap.class, GroveMapCharByte.INSTANCE) //
+                .registerTypeAdapter(TCharCharMap.class, GroveMapCharChar.INSTANCE) //
+                .registerTypeAdapter(TCharDoubleMap.class, GroveMapCharDouble.INSTANCE) //
+                .registerTypeAdapter(TCharFloatMap.class, GroveMapCharFloat.INSTANCE) //
+                .registerTypeAdapter(TCharIntMap.class, GroveMapCharInt.INSTANCE) //
+                .registerTypeAdapter(TCharLongMap.class, GroveMapCharLong.INSTANCE) //
+                .registerTypeAdapter(TCharObjectMap.class, GroveMapCharObject.INSTANCE) //
+                .registerTypeAdapter(TCharShortMap.class, GroveMapCharShort.INSTANCE) //
+                .registerTypeAdapter(TDoubleByteMap.class, GroveMapDoubleByte.INSTANCE) //
+                .registerTypeAdapter(TDoubleCharMap.class, GroveMapDoubleChar.INSTANCE) //
+                .registerTypeAdapter(TDoubleDoubleMap.class, GroveMapDoubleDouble.INSTANCE) //
+                .registerTypeAdapter(TDoubleFloatMap.class, GroveMapDoubleFloat.INSTANCE) //
+                .registerTypeAdapter(TDoubleIntMap.class, GroveMapDoubleInt.INSTANCE) //
+                .registerTypeAdapter(TDoubleLongMap.class, GroveMapDoubleLong.INSTANCE) //
+                .registerTypeAdapter(TDoubleObjectMap.class, GroveMapDoubleObject.INSTANCE) //
+                .registerTypeAdapter(TDoubleShortMap.class, GroveMapDoubleShort.INSTANCE) //
+                .registerTypeAdapter(TFloatByteMap.class, GroveMapFloatByte.INSTANCE) //
+                .registerTypeAdapter(TFloatCharMap.class, GroveMapFloatChar.INSTANCE) //
+                .registerTypeAdapter(TFloatDoubleMap.class, GroveMapFloatDouble.INSTANCE) //
+                .registerTypeAdapter(TFloatFloatMap.class, GroveMapFloatFloat.INSTANCE) //
+                .registerTypeAdapter(TFloatIntMap.class, GroveMapFloatInt.INSTANCE) //
+                .registerTypeAdapter(TFloatLongMap.class, GroveMapFloatLong.INSTANCE) //
+                .registerTypeAdapter(TFloatObjectMap.class, GroveMapFloatObject.INSTANCE) //
+                .registerTypeAdapter(TFloatShortMap.class, GroveMapFloatShort.INSTANCE) //
+                .registerTypeAdapter(TIntByteMap.class, GroveMapIntByte.INSTANCE) //
+                .registerTypeAdapter(TIntCharMap.class, GroveMapIntChar.INSTANCE) //
+                .registerTypeAdapter(TIntDoubleMap.class, GroveMapIntDouble.INSTANCE) //
+                .registerTypeAdapter(TIntFloatMap.class, GroveMapIntFloat.INSTANCE) //
+                .registerTypeAdapter(TIntIntMap.class, GroveMapIntInt.INSTANCE) //
+                .registerTypeAdapter(TIntLongMap.class, GroveMapIntLong.INSTANCE) //
+                .registerTypeAdapter(TIntObjectMap.class, GroveMapIntObject.INSTANCE) //
+                .registerTypeAdapter(TIntShortMap.class, GroveMapIntShort.INSTANCE) //
+                .registerTypeAdapter(TLongByteMap.class, GroveMapLongByte.INSTANCE) //
+                .registerTypeAdapter(TLongCharMap.class, GroveMapLongChar.INSTANCE) //
+                .registerTypeAdapter(TLongDoubleMap.class, GroveMapLongDouble.INSTANCE) //
+                .registerTypeAdapter(TLongFloatMap.class, GroveMapLongFloat.INSTANCE) //
+                .registerTypeAdapter(TLongIntMap.class, GroveMapLongInt.INSTANCE) //
+                .registerTypeAdapter(TLongLongMap.class, GroveMapLongLong.INSTANCE) //
+                .registerTypeAdapter(TLongObjectMap.class, GroveMapLongObject.INSTANCE) //
+                .registerTypeAdapter(TLongShortMap.class, GroveMapLongShort.INSTANCE) //
+                .registerTypeAdapter(TShortByteMap.class, GroveMapShortByte.INSTANCE) //
+                .registerTypeAdapter(TShortCharMap.class, GroveMapShortChar.INSTANCE) //
+                .registerTypeAdapter(TShortDoubleMap.class, GroveMapShortDouble.INSTANCE) //
+                .registerTypeAdapter(TShortFloatMap.class, GroveMapShortFloat.INSTANCE) //
+                .registerTypeAdapter(TShortIntMap.class, GroveMapShortInt.INSTANCE) //
+                .registerTypeAdapter(TShortLongMap.class, GroveMapShortLong.INSTANCE) //
+                .registerTypeAdapter(TShortObjectMap.class, GroveMapShortObject.INSTANCE) //
+                .registerTypeAdapter(TShortShortMap.class, GroveMapShortShort.INSTANCE) //
         ;
+    }
+
+    // For a T{type}ObjectMap<A> or TObject{type}Map<A>, gets the type of <A>.
+    static Type getGenericType(Type typeOfT) {
+        if (!(typeOfT instanceof ParameterizedType)) {
+            throw new JsonParseException("Invalid Object-Primitive map type: " + typeOfT);
+        }
+
+        ParameterizedType castTypeOfT = (ParameterizedType) typeOfT;
+
+        return castTypeOfT.getActualTypeArguments()[0];
+    }
+
+    static char parseChar(String string) {
+        return string.charAt(0);
     }
 }

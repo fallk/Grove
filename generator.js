@@ -2,103 +2,117 @@
 /*jshint node:true*/
 
 const fs = require('fs');
+const path = require('path');
 
 const primitives = [
   "byte", "short", "int", "long", "float", "double", "char", 
 ];
 
-const capPrimitives = [
+const primitivesAbbreviated = [
+  "B", "S", "I", "L", "F", "D", "C",
+];
+
+const primitivesTrove = [
   "Byte", "Short", "Int", "Long", "Float", "Double", "Char", 
 ];
 
-const nPrimitives = [
-  "Byte", "Short", "Integer", "Long", "Float", "Double", "Character", 
+const primitivesClasspath = [
+  "Byte", "Short", "Integer", "Long", "Float", "Double", "Character",
 ];
 
-function findPrimitives(str) {
-  const matches = str.match(/\$primitive([0-9]+)?\$/g);
-  let prim = 1;
+const primitivesGson = [
+  "Byte", "Short", "Int", "Long", "Float", "Double", "Character",
+];
 
-  for (let match of matches) {
-    const i = parseInt(match.substring('$primitive'.length, match.length - 1));
-    if (i > prim) {
-      prim = i;
-    }
+const primitivesParse = [
+  "Byte.parseByte",
+  "Short.parseShort",
+  "Integer.parseInt",
+  "Long.parseLong",
+  "Float.parseFloat",
+  "Double.parseDouble",
+  "Grove.parseChar",
+];
+
+function getTokens(i, j = undefined) {
+  const tokens = {};
+
+  tokens.keyPrim = tokens.prim = primitives[i];
+  tokens.keyName = tokens.name = primitivesAbbreviated[i];
+  tokens.keyShrt = tokens.shrt = primitivesTrove[i];
+  tokens.keyLong = tokens.long = primitivesClasspath[i];
+  tokens.keyLongGson = tokens.longGson = primitivesGson[i];
+  tokens.keySpecialCaseParse = primitivesParse[i];
+  if (j !== undefined) {
+    tokens.valPrim = primitives[j];
+    tokens.valName = primitivesAbbreviated[j];
+    tokens.valShrt = primitivesTrove[j];
+    tokens.valLong = primitivesClasspath[j];
+    tokens.valLongGson = primitivesGson[j];
+    tokens.kvShort = primitivesTrove[i] + primitivesTrove[j];
   }
 
-  return prim;
+  return tokens;
 }
 
-function process(dir,targ='src') {
-  const files = fs.readdirSync(dir);
+function process(inputTemplateDirectory, outputDirectory) {
+  const files = fs.readdirSync(inputTemplateDirectory);
 
   for (const file of files) {
-    const str = fs.readFileSync(dir + file, 'utf8');
+    const str = fs.readFileSync(path.join(inputTemplateDirectory, file), 'utf8');
 
-    const numPrimitives = findPrimitives(str);
+    if (!file.includes("$key") && !file.includes("$val")) {
+      // $prim$ = byte, char, etc.
+      // $name$ = B, C, etc.
+      // $shrt$ = Byte, Char, etc.
+      // $long$ = Byte, Character, etc.
+      // $longGson$ = Byte, Character, etc. but Int instead of Integer
+      // $keyPrim$ = byte, char, etc.
+      // $keyName$ = B, C, etc.
+      // $keyShrt$ = Byte, Char, etc.
+      // $keyLong$ = Byte, Character, etc.
+      // $keyLongGson$, $valLongGson$ = Byte, Character, etc. but Int instead of Integer
+      // $keySpecialCaseParse$ = Byte.parseByte, Integer.parseInt, Grove.parseChar
 
-    const len = primitives.length;
+      for (let i = 0; i < primitives.length; i++) {
 
-    if (numPrimitives == 1) {
+        let s = str;
+        let f = file;
 
-      for (let i = 0; i < len; i++) {
-        let s = str.replace(/\$primitive\$/g, primitives[i])
-                   .replace(/\$primitiveFmt\$/g, capPrimitives[i])
-                   .replace(/\$primitiveN\$/g, nPrimitives[i]);
+        for (const [token, val] of Object.entries(getTokens(i))) {
+          let regex = new RegExp(String.raw`\$${token}\$`, 'g');
+          s = s.replace(regex, val);
+          f = f.replace(regex, val);
+        }
 
-        let f = file.replace(/\$primitive\$/g, primitives[i])
-                    .replace(/\$primitiveFmt\$/g, capPrimitives[i])
-                    .replace(/\$primitiveN\$/g, nPrimitives[i]);
+        fs.writeFileSync(path.join(outputDirectory, f), s);
+      }
+    } else {
+      // $keyPrim$, $valPrim$ = byte, char, etc.
+      // $keyName$, $valName$ = B, C, etc.
+      // $keyShrt$, $valShrt$ = Byte, Char, etc.
+      // $keyLong$, $valLong$ = Byte, Character, etc.
+      // $keyLongGson$, $valLongGson$ = Byte, Character, etc. but Int instead of Integer
+      // $keySpecialCaseParse$ = Byte.parseByte, Integer.parseInt, Grove.parseChar
+      // $kvShort$ = ByteByte, ByteChar, etc.
 
-        fs.writeFileSync('./'+targ+'/fallk/grove/' + f, s);
+      for (let i = 0; i < primitives.length; i++)
+      for (let j = 0; j < primitives.length; j++) {
+        let s = str;
+        let f = file;
+
+        for (const [token, val] of Object.entries(getTokens(i, j))) {
+          let regex = new RegExp(String.raw`\$${token}\$`, 'g');
+          s = s.replace(regex, val);
+          f = f.replace(regex, val);
+        }
+
+        fs.writeFileSync(path.join(outputDirectory, f), s);
       }
 
-    } else if (numPrimitives == 2) {
-
-      for (let i = 0; i < len; i++)
-      for (let j = 0; j < len; j++) {
-        let s = str.replace(/\$primitive\$/g, primitives[i])
-                   .replace(/\$primitiveFmt\$/g, capPrimitives[i])
-                   .replace(/\$primitiveN\$/g, nPrimitives[i])
-                   .replace(/\$primitive2\$/g, primitives[j])
-                   .replace(/\$primitiveFmt2\$/g, capPrimitives[j])
-                   .replace(/\$primitiveN2\$/g, capPrimitives[j]);
-
-        let f = file.replace(/\$primitive\$/g, primitives[i])
-                    .replace(/\$primitiveFmt\$/g, capPrimitives[i])
-                    .replace(/\$primitiveN\$/g, nPrimitives[i])
-                    .replace(/\$primitive2\$/g, primitives[j])
-                    .replace(/\$primitiveFmt2\$/g, capPrimitives[j])
-                    .replace(/\$primitiveN2\$/g, capPrimitives[j]);
-
-        fs.writeFileSync('./'+targ+'/fallk/grove/' + f, s);
-      }
-
-    }/* else if (numPrimitives == 3) {
-
-      for (let i = 0; i < len; i++)
-      for (let j = 0; j < len; j++)
-      for (let k = 0; k < len; k++) {
-        let s = str.replace(/\$primitive\$/g, primitives[i])
-                   .replace(/\$primitiveFmt\$/g, capPrimitives[i])
-                   .replace(/\$primitive2\$/g, primitives[j])
-                   .replace(/\$primitiveFmt2\$/g, capPrimitives[j])
-                   .replace(/\$primitive3\$/g, primitives[k])
-                   .replace(/\$primitiveFmt3\$/g, capPrimitives[k]);
-
-        let f = file.replace(/\$primitive\$/g, primitives[i])
-                    .replace(/\$primitiveFmt\$/g, capPrimitives[i])
-                    .replace(/\$primitive2\$/g, primitives[j])
-                    .replace(/\$primitiveFmt2\$/g, capPrimitives[j])
-                    .replace(/\$primitive3\$/g, primitives[k])
-                    .replace(/\$primitiveFmt3\$/g, capPrimitives[k]);
-
-        fs.writeFileSync('./src/main/java/fallk/grove/' + f, s);
-      }
-
-    }*/
+    }
   }
 }
 
-process('./generators/', 'src/main/java');
-process('./test-generators/', 'src/test/java');
+process('./generators', 'src/main/java/fallk/grove');
+process('./test-generators', 'src/test/java/fallk/grove');
