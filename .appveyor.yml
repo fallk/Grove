@@ -74,7 +74,7 @@ artifacts:
 
 deploy:
   tag: 'rev$(appveyor_build_version)'
-  release: 'JFunktion r$(appveyor_build_version)'
+  release: 'Grove r$(appveyor_build_version)'
   description: 'Built from branch $(APPVEYOR_REPO_BRANCH) at $(APPVEYOR_REPO_COMMIT_TIMESTAMP).'
   
   provider: GitHub
